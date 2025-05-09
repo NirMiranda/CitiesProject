@@ -16,7 +16,6 @@ namespace CitiesProject.Controllers
     {
         private CitiesProjectDBEntities db = new CitiesProjectDBEntities();
 
-        // GET: Cities
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
@@ -45,11 +44,9 @@ namespace CitiesProject.Controllers
 
             int pageSize = 5;
             int pageNumber = (page ?? 1);
-
             return View(cities.ToPagedList(pageNumber, pageSize));
         }
 
-        // GET: Cities/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -62,17 +59,20 @@ namespace CitiesProject.Controllers
             return View(city);
         }
 
-        // GET: Cities/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Cities/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,CityName")] City city)
         {
+            if (db.Cities.Any(c => c.CityName == city.CityName))
+            {
+                ModelState.AddModelError("CityName", "העיר כבר קיימת במערכת.");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Cities.Add(city);
@@ -83,7 +83,6 @@ namespace CitiesProject.Controllers
             return View(city);
         }
 
-        // GET: Cities/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -93,15 +92,18 @@ namespace CitiesProject.Controllers
             if (city == null)
                 return HttpNotFound();
 
-            ViewBag.EditMode = true; // For optional UI indication
             return View(city);
         }
 
-        // POST: Cities/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,CityName")] City city)
         {
+            if (db.Cities.Any(c => c.CityName == city.CityName && c.Id != city.Id))
+            {
+                ModelState.AddModelError("CityName", "שם העיר כבר קיים.");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(city).State = EntityState.Modified;
@@ -111,7 +113,6 @@ namespace CitiesProject.Controllers
             return View(city);
         }
 
-        // GET: Cities/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -124,7 +125,6 @@ namespace CitiesProject.Controllers
             return View(city);
         }
 
-        // POST: Cities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -135,14 +135,6 @@ namespace CitiesProject.Controllers
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-                db.Dispose();
-            base.Dispose(disposing);
-        }
-
-        // === Helper: Convert English keyboard input to Hebrew layout ===
         private string ConvertEngToHebKeyboard(string input)
         {
             var map = new Dictionary<char, char>()
@@ -158,6 +150,13 @@ namespace CitiesProject.Controllers
                 converted.Append(map.ContainsKey(c) ? map[c] : c);
             }
             return converted.ToString();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                db.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

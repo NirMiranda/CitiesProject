@@ -17,7 +17,10 @@
             <div class="col-md-6">
                 <div class="input-group flex-row-reverse">
                     <button class="btn btn-outline-secondary" type="button" id="clearSearch">נקה</button>
-                    <input type="text" id="searchInput" class="form-control text-end" placeholder="חפש עיר" value="@ViewBag.CurrentFilter" />
+                    <input type="text" id="searchInput" class="form-control text-end"
+                           placeholder="חפש עיר"
+                           value="@ViewBag.CurrentFilter"
+                           data-sort="@ViewBag.CurrentSort" />
                 </div>
             </div>
         </div>
@@ -32,7 +35,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function loadCities(query = "") {
-            $.get("@Url.Action("Index", "Cities")", { searchString: query }, function (data) {
+            const sort = $("#searchInput").data("sort");
+            $.get("@Url.Action("Index", "Cities")", {
+                searchString: query,
+                sortOrder: sort
+            }, function (data) {
                 const newHtml = $(data).find("#citiesTable").html();
                 $("#citiesTable").html(newHtml);
             });

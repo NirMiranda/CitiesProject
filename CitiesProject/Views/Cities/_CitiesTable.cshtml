@@ -5,8 +5,18 @@
     <table class="table table-bordered table-striped fs-5 w-100" style="min-width: 500px;">
         <thead class="table-primary">
             <tr>
-                <th scope="col" style="width: 50%;">שם העיר</th>
-                <th scope="col" style="width: 50%;">פעולות</th>
+                <th scope="col">
+                    @Html.ActionLink(
+                        ViewBag.CurrentSort == "name_desc" ? "שם העיר ⬆" : "שם העיר ⬇",
+                        "Index",
+                        new
+                        {
+                            sortOrder = ViewBag.NameSortParm,
+                            currentFilter = ViewBag.CurrentFilter
+                        }
+                    )
+                </th>
+                <th scope="col">פעולות</th>
             </tr>
         </thead>
         <tbody>
