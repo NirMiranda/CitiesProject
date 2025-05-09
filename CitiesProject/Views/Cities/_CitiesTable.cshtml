@@ -1,0 +1,69 @@
+﻿@model PagedList.IPagedList<CitiesProject.Models.City>
+@using PagedList.Mvc;
+
+<div class="mx-auto" style="min-width: 600px; max-width: 850px;">
+    <table class="table table-bordered table-striped fs-5 w-100" style="min-width: 500px;">
+        <thead class="table-primary">
+            <tr>
+                <th scope="col" style="width: 50%;">שם העיר</th>
+                <th scope="col" style="width: 50%;">פעולות</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.CityName</td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-secondary text-dark me-1" href="@Url.Action("Edit", new { id = item.Id })">
+                            <i class="bi bi-pencil-square"></i> עריכה
+                        </a>
+                        <a class="btn btn-sm btn-outline-danger" href="@Url.Action("Delete", new { id = item.Id })">
+                            <i class="bi bi-trash"></i> מחיקה
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav class="d-flex justify-content-center mt-3" aria-label="Pagination">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new
+        {
+            page,
+            sortOrder = ViewBag.CurrentSort,
+            currentFilter = ViewBag.CurrentFilter
+        }),
+        new PagedListRenderOptions
+        {
+            DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+            DisplayLinkToLastPage = PagedListDisplayMode.Always,
+            DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+            DisplayLinkToNextPage = PagedListDisplayMode.Always,
+            LinkToFirstPageFormat = "<i class='bi bi-chevron-double-right'></i>",
+            LinkToPreviousPageFormat = "<i class='bi bi-chevron-right'></i>",
+            LinkToNextPageFormat = "<i class='bi bi-chevron-left'></i>",
+            LinkToLastPageFormat = "<i class='bi bi-chevron-double-left'></i>",
+            UlElementClasses = new[] { "pagination" },
+            LiElementClasses = new[] { "page-item" }
+        })
+    </nav>
+</div>
+
+<style>
+    .pagination a,
+    .pagination span {
+        padding: 8px 12px;
+        margin: 0 2px;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        color: #0d6efd;
+        text-decoration: none;
+    }
+
+    .pagination .active span {
+        background-color: #0d6efd;
+        color: white;
+        border-color: #0d6efd;
+    }
+</style>

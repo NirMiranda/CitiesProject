@@ -1,42 +1,24 @@
 ﻿@model CitiesProject.Models.City
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "עריכת עיר";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit</h2>
+<div class="container mt-4" dir="rtl">
+    <h2 class="text-center mb-4">עריכת עיר: @Model.CityName</h2>
 
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>City</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CityName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CityName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CityName, "", new { @class = "text-danger" })
-            </div>
+        <div class="mb-3">
+            @Html.LabelFor(model => model.CityName, "שם העיר", htmlAttributes: new { @class = "form-label" })
+            @Html.TextBoxFor(model => model.CityName, new { @class = "form-control text-end" })
+            @Html.ValidationMessageFor(model => model.CityName, "", new { @class = "text-danger" })
         </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
+        <button type="submit" class="btn btn-primary">שמור שינויים</button>
+        @Html.ActionLink("חזרה לרשימה", "Index", null, new { @class = "btn btn-link" })
+    }
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

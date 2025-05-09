@@ -1,33 +1,56 @@
-﻿@model IEnumerable<CitiesProject.Models.City>
+﻿@model PagedList.IPagedList<CitiesProject.Models.City>
+@using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "רשימת ערים";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div class="d-flex justify-content-center mt-4" dir="rtl">
+    <div style="min-width: 600px; max-width: 850px; width: 100%;">
+        <h2 class="text-center mb-4">רשימת ערים</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CityName)
-        </th>
-        <th></th>
-    </tr>
+        <div class="row mb-3 align-items-center">
+            <div class="col-md-6">
+                @Html.ActionLink("הוסף עיר", "Create", null, new { @class = "btn btn-success w-100" })
+            </div>
+            <div class="col-md-6">
+                <div class="input-group flex-row-reverse">
+                    <button class="btn btn-outline-secondary" type="button" id="clearSearch">נקה</button>
+                    <input type="text" id="searchInput" class="form-control text-end" placeholder="חפש עיר" value="@ViewBag.CurrentFilter" />
+                </div>
+            </div>
+        </div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CityName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+        <div id="citiesTable">
+            @Html.Partial("_CitiesTable", Model)
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function loadCities(query = "") {
+            $.get("@Url.Action("Index", "Cities")", { searchString: query }, function (data) {
+                const newHtml = $(data).find("#citiesTable").html();
+                $("#citiesTable").html(newHtml);
+            });
+        }
+
+        $(document).ready(function () {
+            let typingTimer;
+            $("#searchInput").on("input", function () {
+                clearTimeout(typingTimer);
+                typingTimer = setTimeout(() => {
+                    loadCities($(this).val());
+                }, 300);
+            });
+
+            $("#clearSearch").on("click", function () {
+                $("#searchInput").val("");
+                loadCities("");
+            });
+        });
+    </script>
 }
-
-</table>
