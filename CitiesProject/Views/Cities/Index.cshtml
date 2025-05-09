@@ -7,7 +7,7 @@
 }
 
 <div class="d-flex justify-content-center mt-4" dir="rtl">
-    <div style="min-width: 600px; max-width: 850px; width: 100%;">
+    <div style="max-width: 850px; width: 100%;">
         <h2 class="text-center mb-4">רשימת ערים</h2>
 
         <div class="row mb-3 align-items-center">
@@ -17,7 +17,7 @@
             <div class="col-md-6">
                 <div class="input-group flex-row-reverse">
                     <button class="btn btn-outline-secondary" type="button" id="clearSearch">נקה</button>
-                    <input type="text" id="searchInput" class="form-control text-end"
+                    <input type="text" id="searchInput" class="form-control text-end" style="max-width: 100%"
                            placeholder="חפש עיר"
                            value="@ViewBag.CurrentFilter"
                            data-sort="@ViewBag.CurrentSort" />
@@ -34,6 +34,7 @@
 @section scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+
         function loadCities(query = "") {
             const sort = $("#searchInput").data("sort");
             $.get("@Url.Action("Index", "Cities")", {

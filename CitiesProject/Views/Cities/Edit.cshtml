@@ -12,13 +12,22 @@
     {
         @Html.AntiForgeryToken()
 
-        <div class="mb-3">
-            @Html.LabelFor(model => model.CityName, "שם העיר", htmlAttributes: new { @class = "form-label" })
-            @Html.TextBoxFor(model => model.CityName, new { @class = "form-control text-end" })
-            @Html.ValidationMessageFor(model => model.CityName, "", new { @class = "text-danger" })
+        <div class="d-flex gap-2 align-items-stretch">
+            @Html.TextBoxFor(model => model.CityName, new
+            {
+                @class = "form-control text-end",
+                placeholder = "שם העיר"
+            })
+
+            <button type="submit" class="btn btn-success d-flex align-items-center px-4">
+                שמור שינויים
+            </button>
+
+            <a href="@Url.Action("Index")" class="btn btn-danger d-flex align-items-center px-4">
+                חזרה לרשימה
+            </a>
         </div>
 
-        <button type="submit" class="btn btn-primary">שמור שינויים</button>
-        @Html.ActionLink("חזרה לרשימה", "Index", null, new { @class = "btn btn-link" })
+        @Html.ValidationMessageFor(model => model.CityName, "", new { @class = "text-danger mt-2" })
     }
 </div>
