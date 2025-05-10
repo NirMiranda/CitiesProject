@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-4" dir="rtl" style="width: 60%">
+<div class="container mt-4 px-3" dir="rtl">
     <h2 class="text-center mb-4">הוספת עיר</h2>
 
     @using (Html.BeginForm())
@@ -19,9 +19,9 @@
                 placeholder = "שם העיר"
             })
 
-            <button type="submit" class="btn btn-success d-flex align-items-center px-4">שמור</button>
+            <button type="submit" class="btn btn-success d-flex align-items-center px-2">שמור</button>
 
-            <a href="@Url.Action("Index")" class="btn btn-danger d-flex align-items-center px-4">חזרה לרשימה</a>
+            <a href="@Url.Action("Index")" class="btn btn-danger d-flex align-items-center px-2">חזרה לרשימה</a>
         </div>
 
         @Html.ValidationMessageFor(model => model.CityName, "", new { @class = "text-danger mt-2" })
@@ -31,19 +31,37 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const form = document.querySelector("form");
             const input = document.querySelector("#CityName");
+            const validationSpan = document.querySelector("[data-valmsg-for='CityName']");
+
             const hebrewRegex = /^[\u0590-\u05FF\s\-]+$/;
 
             form.addEventListener("submit", function (e) {
                 const value = input.value.trim();
+
                 if (!hebrewRegex.test(value)) {
                     e.preventDefault();
-                    alert("נא להזין שם עיר בעברית בלבד.");
-                    input.focus();
+
+                    // show error in the validation span
+                    validationSpan.textContent = "נא להזין שם עיר בעברית בלבד.";
+                    validationSpan.classList.remove("field-validation-valid");
+                    validationSpan.classList.add("field-validation-error");
+
+                    input.classList.add("input-validation-error");
+
+                    return false;
                 }
+
+                // clear previous validation if valid
+                validationSpan.textContent = "";
+                validationSpan.classList.remove("field-validation-error");
+                validationSpan.classList.add("field-validation-valid");
+
+                input.classList.remove("input-validation-error");
             });
         });
     </script>
