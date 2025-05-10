@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-4" dir="rtl">
+<div class="container mt-4" dir="rtl" style="width: 60%">
     <h2 class="text-center mb-4">הוספת עיר</h2>
 
     @using (Html.BeginForm())
@@ -27,3 +27,24 @@
         @Html.ValidationMessageFor(model => model.CityName, "", new { @class = "text-danger mt-2" })
     }
 </div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector("form");
+            const input = document.querySelector("#CityName");
+            const hebrewRegex = /^[\u0590-\u05FF\s\-]+$/;
+
+            form.addEventListener("submit", function (e) {
+                const value = input.value.trim();
+                if (!hebrewRegex.test(value)) {
+                    e.preventDefault();
+                    alert("נא להזין שם עיר בעברית בלבד.");
+                    input.focus();
+                }
+            });
+        });
+    </script>
+}

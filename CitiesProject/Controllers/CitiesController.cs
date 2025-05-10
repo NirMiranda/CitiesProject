@@ -151,6 +151,10 @@ namespace CitiesProject.Controllers
             }
             return converted.ToString();
         }
+        private bool IsHebrewOnly(string input)
+        {
+            return System.Text.RegularExpressions.Regex.IsMatch(input, @"^[\u0590-\u05FF\s\-]+$");
+        }
 
         protected override void Dispose(bool disposing)
         {

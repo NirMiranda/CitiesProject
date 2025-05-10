@@ -31,3 +31,23 @@
         @Html.ValidationMessageFor(model => model.CityName, "", new { @class = "text-danger mt-2" })
     }
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector("form");
+            const input = document.querySelector("#CityName");
+            const hebrewRegex = /^[\u0590-\u05FF\s\-]+$/;
+
+            form.addEventListener("submit", function (e) {
+                const value = input.value.trim();
+                if (!hebrewRegex.test(value)) {
+                    e.preventDefault();
+                    alert("נא להזין שם עיר בעברית בלבד.");
+                    input.focus();
+                }
+            });
+        });
+    </script>
+}
